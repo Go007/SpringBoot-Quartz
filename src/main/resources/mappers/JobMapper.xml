@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hong.quartz.mapper.JobMapper">
+
+    <select id="getJobInfo" resultType="com.hong.quartz.model.JobInfo">
+	 SELECT DISTINCT
+		a.JOB_NAME AS jobName,
+		a.JOB_GROUP AS jobGroup,
+		a.JOB_CLASS_NAME AS jobClassName,
+		a.DESCRIPTION AS description,
+		c.CRON_EXPRESSION AS cronExpression,
+                b.TRIGGER_STATE AS state
+	FROM
+		QRTZ_JOB_DETAILS a
+	LEFT JOIN QRTZ_TRIGGERS b ON b.`TRIGGER_NAME`=a.`JOB_NAME`
+	LEFT JOIN QRTZ_CRON_TRIGGERS c ON c.`TRIGGER_NAME`=b.`TRIGGER_NAME`
+    </select>
+
+	<select id="getJobByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+	     select count(*) from QRTZ_JOB_DETAILS where job_name=#{jobName}
+    </select>
+</mapper>
+
+
